@@ -43,14 +43,14 @@ def config(filename="config.ini", section="mysql") -> Dict[str, str]:
     return config_dict
 
 
-async def make_pool():
+async def make_pool() -> aiomysql.pool.Pool:
     global POOL
     if POOL is None:
         POOL = await aiomysql.create_pool(maxsize=10, **config())
     return POOL
 
 
-async def kill_pool():
+async def kill_pool() -> None:
     global POOL
     if POOL is not None:
         POOL.close()
@@ -113,7 +113,7 @@ async def dummy(executor: DBExecutor) -> None:
     # print(result[0][0])
 
 
-async def no_pool_main():
+async def no_pool_main() -> None:
     start = time.time()
     executor = no_pool_execute
     for i in range(N):
@@ -122,7 +122,7 @@ async def no_pool_main():
     print(time.time() - start, "seconds")
 
 
-async def pool_main():
+async def pool_main() -> None:
     start = time.time()
     executor = pool_execute
     await make_pool()
@@ -133,5 +133,5 @@ async def pool_main():
     print(time.time() - start, "seconds")
 
 
-asyncio.run(no_pool_main())  # 34.54226851463318 seconds
-# asyncio.run(pool_main())  # 5.571674585342407 seconds
+# asyncio.run(no_pool_main())  # 34.54226851463318 seconds
+asyncio.run(pool_main())  # 5.571674585342407 seconds
