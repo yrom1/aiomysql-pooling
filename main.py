@@ -77,10 +77,6 @@ async def pool_execute(
             print(f"{command=}")
         raise e
 
-    finally:
-        await cursor.close()
-        # pool.release(conn)
-
     return result
 
 
