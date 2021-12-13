@@ -65,7 +65,7 @@ async def pool_execute(
     try:
         pool = POOL
         if pool is None:
-            pool = await aiomysql.create_pool(**config())
+            pool = await make_pool()
         async with pool.acquire() as conn:
             async with conn.cursor() as cursor:
                 await cursor.execute(command, data)
@@ -75,6 +75,7 @@ async def pool_execute(
     except Exception as e:
         if not None:
             print(f"{command=}")
+        await kill_pool()
         raise e
 
     return result
@@ -121,7 +122,6 @@ async def no_pool_main() -> None:
 async def pool_main() -> None:
     start = time.time()
     executor = pool_execute
-    await make_pool()
     for i in range(N):
         await dummy(executor)
         await dummy(executor)
