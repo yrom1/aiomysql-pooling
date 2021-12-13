@@ -129,5 +129,5 @@ async def pool_main() -> None:
     print(time.time() - start, "seconds")
 
 
-# asyncio.run(no_pool_main())  # 34.54226851463318 seconds
+asyncio.run(no_pool_main())  # 34.54226851463318 seconds
 asyncio.run(pool_main())  # 5.571674585342407 seconds
